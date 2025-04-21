@@ -51,7 +51,7 @@ extension MyWidgetControl {
 struct TimerConfiguration: ControlConfigurationIntent {
     static let title: LocalizedStringResource = "Timer Name Configuration"
 
-    @Parameter(title: "Timer Name", default: "Timer")
+    @Parameter(title: "Timer Name", default: "Nice Nice")
     var timerName: String
 }
 

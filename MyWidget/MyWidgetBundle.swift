@@ -12,7 +12,7 @@ import SwiftUI
 struct MyWidgetBundle: WidgetBundle {
     var body: some Widget {
         MyWidget()
-        MyWidgetControl()
-        MyWidgetLiveActivity()
+//        MyWidgetControl()
+//        MyWidgetLiveActivity()
     }
 }

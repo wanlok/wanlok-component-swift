@@ -20,14 +20,13 @@ struct Provider: AppIntentTimelineProvider {
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
         var entries: [SimpleEntry] = []
 
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
+        for minuteOffset in 0..<60 {
+            let entryDate = Calendar.current.date(byAdding: .minute, value: minuteOffset, to: currentDate)!
             let entry = SimpleEntry(date: entryDate, configuration: configuration)
             entries.append(entry)
         }
-
+        
         return Timeline(entries: entries, policy: .atEnd)
     }
 
@@ -41,16 +40,38 @@ struct SimpleEntry: TimelineEntry {
     let configuration: ConfigurationAppIntent
 }
 
+
+let formatter: DateFormatter = {
+    let df = DateFormatter()
+    df.dateFormat = "HH:mm:ss"
+    return df
+}()
+
 struct MyWidgetEntryView : View {
     var entry: Provider.Entry
-
+    
     var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
-
-            Text("Favorite Emoji:")
-            Text(entry.configuration.favoriteEmoji)
+        GeometryReader { geometry in
+            let w = geometry.size.width
+            let h = geometry.size.height
+            VStack(spacing: 0) {
+                VStack {
+                    Image("logo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(.horizontal, 16)
+                        .frame(width: w / 2 + 16 * 2, height: h / 2)
+                        .background(Color.red)
+                }
+                .frame(width: w, height: h / 2)
+                .background(Color.blue)
+                Text("Time: " + formatter.string(from: entry.date) + " " +  entry.configuration.favoriteEmoji)
+                    .padding(16)
+                    .frame(height: h / 2)
+                    .background(Color.yellow)
+            }
+            .frame(width: w, height: h)
+            .background(Color.green)
         }
     }
 }
